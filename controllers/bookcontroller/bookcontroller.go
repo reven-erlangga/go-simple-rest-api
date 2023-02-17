@@ -1,7 +1,6 @@
 package bookcontroller
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/gin-gonic/gin"
 
-func index(c *fiber.Ctx) error {
-	return nil
+func Index(c *gin.Context) {
 }

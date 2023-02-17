@@ -15,6 +15,10 @@ func main() {
 	
 	book := v1.Group("/books")
 	book.GET("/", bookcontroller.Index)
+	book.GET("/:id", bookcontroller.Show)
+	book.POST("/", bookcontroller.Create)
+	book.PUT("/:id", bookcontroller.Update)
+	book.DELETE("/:id", bookcontroller.Delete)
 
 	app.Run()
 }

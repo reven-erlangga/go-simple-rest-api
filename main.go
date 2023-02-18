@@ -2,13 +2,17 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/reven-erlangga/go-fiber-simple-rest-api/controllers/bookcontroller"
-	"github.com/reven-erlangga/go-fiber-simple-rest-api/models"
+	"github.com/reven-erlangga/go-simple-rest-api/controllers/bookcontroller"
+	"github.com/reven-erlangga/go-simple-rest-api/initializers"
 )
+
+func init()  {
+	initializers.LoadEnvVariable()
+}
 
 func main() {
 	app := gin.Default()
-	models.ConnectDatabase()
+	initializers.ConnectDatabase()
 	
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
@@ -18,7 +22,7 @@ func main() {
 	book.GET("/:id", bookcontroller.Show)
 	book.POST("/", bookcontroller.Create)
 	book.PUT("/:id", bookcontroller.Update)
-	book.DELETE("/:id", bookcontroller.Delete)
+	book.DELETE("/", bookcontroller.Delete)
 
 	app.Run()
 }

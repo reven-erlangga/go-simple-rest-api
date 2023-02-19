@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/reven-erlangga/go-simple-rest-api/controllers"
 	"github.com/reven-erlangga/go-simple-rest-api/controllers/bookcontroller"
@@ -13,7 +14,10 @@ func init()  {
 
 func main() {
 	app := gin.Default()
+	app.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedExtensions([]string{".pdf", ".mp4"})))
+
 	initializers.ConnectDatabase()
+	initializers.ConnectRedis()
 	
 	api := app.Group("/api")
 	v1 := api.Group("/v1")

@@ -1,20 +1,47 @@
 package bookcontroller
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"github.com/reven-erlangga/go-simple-rest-api/initializers"
 	"github.com/reven-erlangga/go-simple-rest-api/models"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
 func Index(c *gin.Context) {
+	ctx := context.Background()
 	var books []models.Book
 
-	initializers.DB.Find(&books)
-	c.JSON(http.StatusOK, gin.H{"books": books})
+	result, err := initializers.RDB.Get(ctx, "fetch:books").Result()
+	if err == redis.Nil {
+		initializers.DB.Find(&books)
+		data, _ := json.Marshal(books)
+
+		err := initializers.RDB.Set(ctx, "fetch:books", data, viper.GetDuration("REDIS_CACHE_DURATION")*time.Minute).Err()
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": err})
+			return
+		}
+	} else if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": err})
+		return
+	} else {
+		err = json.Unmarshal([]byte(result), &books)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": err})
+			return
+		}
+	}
+
+	c.Header("Content-Type", "application/json")
+	c.JSON(http.StatusOK, gin.H{"books": &books})
+
 }
 
 func Show(c *gin.Context)  {

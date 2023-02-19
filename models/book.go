@@ -13,3 +13,4 @@ type Book struct {
 	PublishDate    string `gorm:"date" json:"publish_date"`
 	ImageCoverPath string `gorm:"varchar(300)" json:"image_cover_path"`
 }
+

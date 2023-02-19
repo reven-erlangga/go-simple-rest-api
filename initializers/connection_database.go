@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/reven-erlangga/go-simple-rest-api/models"
+	// seederBook "github.com/reven-erlangga/go-simple-rest-api/seeders/books"
 )
 
 var DB *gorm.DB
@@ -21,6 +22,8 @@ func ConnectDatabase() {
 
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Book{})
+
+	// seederBook.DBSeed(db, 1000)
 
 	DB = db
 }

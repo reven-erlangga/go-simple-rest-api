@@ -21,8 +21,12 @@ func ConnectDatabase() {
 		helpers.ErrorPanic(err)
 	}
 
+
+
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Book{})
+
+	
 
 	// seederBook.DBSeed(db, 1000)
 

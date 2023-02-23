@@ -6,6 +6,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
+	"github.com/reven-erlangga/go-simple-rest-api/helpers"
 	"github.com/reven-erlangga/go-simple-rest-api/models"
 	// seederBook "github.com/reven-erlangga/go-simple-rest-api/seeders/books"
 )
@@ -17,7 +18,7 @@ func ConnectDatabase() {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		panic(err)
+		helpers.ErrorPanic(err)
 	}
 
 	db.AutoMigrate(&models.User{})
